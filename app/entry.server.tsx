@@ -41,11 +41,12 @@ export default function handleRequest(
 
 function handleBotRequest(
   request: Request,
-  responseStatusCode: number,
+  initResponseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
   return new Promise((resolve, reject) => {
+    let responseStatusCode = initResponseStatusCode;
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
       <RemixServer
@@ -91,11 +92,12 @@ function handleBotRequest(
 
 function handleBrowserRequest(
   request: Request,
-  responseStatusCode: number,
+  initResponseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
   return new Promise((resolve, reject) => {
+    let responseStatusCode = initResponseStatusCode;
     let shellRendered = false;
     const { pipe, abort } = renderToPipeableStream(
       <RemixServer
