@@ -1,25 +1,12 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { Form, useLoaderData, useNavigate } from "@remix-run/react";
-import { checkAuth, updateAuth } from "app/hooks/auth";
+import { LoginLoader } from "./loader";
 import authenticatedAtom from "app/store/authenticated";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-    const { authenticated, sessionHeaders, flash } = await checkAuth(request);
-
-    return json({ authenticated, error: flash?.error }, sessionHeaders);
-}
-
-export async function action({ request }: ActionFunctionArgs) {
-    const { authenticated, sessionHeaders } = await updateAuth(request);
-
-    return json({ authenticated }, sessionHeaders);
-}
-
 export default function Login() 
 {
-    const { authenticated, error } = useLoaderData<typeof loader>();
+    const { authenticated, error } = useLoaderData<typeof LoginLoader>();
     const [ authState, setAuthState ] = useAtom(authenticatedAtom);
     const navigate = useNavigate();
 
