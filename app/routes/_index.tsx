@@ -3,17 +3,11 @@ import { Form, Link } from "@remix-run/react";
 import { checkAuth } from "app/hooks/auth";
 
 export async function loader({request}:LoaderFunctionArgs) {
-    const { authenticated, session } = await checkAuth(request);
+    const { authenticated, sessionHeaders } = await checkAuth(request);
 
-    const headers = {
-        'Set-Cookie': session
-    }
+    if (!authenticated) return redirect('/login', sessionHeaders);
 
-    if (!authenticated) return redirect('/login', { headers });
-
-    return json({ authenticated }, {
-        headers
-    })
+    return json({ authenticated }, sessionHeaders)
 }
 
 export default function Index() {

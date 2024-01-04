@@ -4,7 +4,12 @@ import { useAtom } from "jotai";
 
 type AuthReturn = {
     authenticated: boolean|null,
-    session: string
+    session: string,
+    sessionHeaders: {
+        headers: {
+            "Set-Cookie": string;
+        }
+    }
 }
 
 /**
@@ -27,12 +32,17 @@ export default function useAuth(): Partial<AuthReturn> {
 
 export async function checkAuth(request: Request): Promise<AuthReturn> {
     const session = await getSession(request.headers.get("Cookie"));
-
-    console.log(session.data);
+    
+    const sessionString = await commitSession(session);
 
     return {
         authenticated: !!session.data?.token,
-        session: await commitSession(session)
+        session: sessionString,
+        sessionHeaders: {
+            headers: {
+                "Set-Cookie": sessionString
+            }
+        }
     }
 }
 
@@ -41,8 +51,15 @@ export async function updateAuth(request: Request): Promise<AuthReturn> {
 
     session.set("token", "some-random-token");
 
+    const sessionString = await commitSession(session);
+
     return {
-        authenticated: false,
-        session: await commitSession(session)
+        authenticated: !!session.data?.token,
+        session: sessionString,
+        sessionHeaders: {
+            headers: {
+                "Set-Cookie": sessionString
+            }
+        }
     }
 }
