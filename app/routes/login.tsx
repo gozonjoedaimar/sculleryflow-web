@@ -6,30 +6,20 @@ import { useAtom } from "jotai";
 import { useEffect } from "react";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-    const { authenticated, session } = await checkAuth(request);
+    const { authenticated, sessionHeaders, flash } = await checkAuth(request);
 
-    const headers = {
-        'Set-Cookie': session
-    }
-
-    return json({ authenticated }, { headers });
+    return json({ authenticated, error: flash?.error }, sessionHeaders);
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    const { authenticated, session } = await updateAuth(request);
+    const { authenticated, sessionHeaders } = await updateAuth(request);
 
-    console.log(authenticated);
-
-    const headers = {
-        'Set-Cookie': session
-    }
-
-    return json({ authenticated }, {headers});
+    return json({ authenticated }, sessionHeaders);
 }
 
 export default function Login() 
 {
-    const { authenticated } = useLoaderData<typeof loader>();
+    const { authenticated, error } = useLoaderData<typeof loader>();
     const [ authState, setAuthState ] = useAtom(authenticatedAtom);
     const navigate = useNavigate();
 
@@ -44,7 +34,10 @@ export default function Login()
         authenticated ? null: 
         <>
             <p>Login</p>
+            {error && <p className="text-red-500">{error}</p>}
             <Form method="post">
+                <input type="email" name="email" placeholder="email" />
+                <input type="password" name="password" placeholder="password" />
                 <button
                     className="border py-1 px-3 rounded-lg bg-blue-500 text-white"
                     type="submit"
