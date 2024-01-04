@@ -1,12 +1,7 @@
-import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
-import { checkAuth } from "app/hooks/auth";
+import AuthLoader from "app/features/auth/loader";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-    const { authenticated } = await checkAuth(request);
-    if (!authenticated) return redirect('/login');
-    return json({ authenticated });
-}
+export const loader = AuthLoader;
 
 export default function MenuItem()
 {
