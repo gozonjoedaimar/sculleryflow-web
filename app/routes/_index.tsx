@@ -1,21 +1,34 @@
-import { Link, useNavigate } from "@remix-run/react";
-import tokenAtom from "app/store/token";
-import { useAtom } from "jotai";
+import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
+import { Form, Link } from "@remix-run/react";
+import { checkAuth } from "app/hooks/auth";
+
+export async function loader({request}:LoaderFunctionArgs) {
+    const { authenticated, session } = await checkAuth(request);
+
+    const headers = {
+        'Set-Cookie': session
+    }
+
+    if (!authenticated) return redirect('/login', { headers });
+
+    return json({ authenticated }, {
+        headers
+    })
+}
 
 export default function Index() {
-    const [token, setToken] = useAtom(tokenAtom);
-    const navigate = useNavigate();
     return (
         <>
             <p>Sculleryflow App Dashboard</p>
             <Link to="/menu" className="border py-1 px-2 bg-gray-400">Menu</Link>
-            <button
-                className="border py-1 px-3 rounded-lg bg-blue-500 text-white"
-                type="button"
-                onClick={() => setToken(null)}
-            >
-                Logout
-            </button>
+            <Form method="post" action="/logout">
+                <button
+                    className="border py-1 px-3 rounded-lg bg-blue-500 text-white"
+                    type="submit"
+                >
+                    Logout
+                </button>
+            </Form>
         </>
     );
 }
