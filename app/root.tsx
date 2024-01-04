@@ -4,12 +4,14 @@ import {
   Links,
   LiveReload,
   Meta,
-  Outlet,
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
 
 import stylesheet from "./styles.css";
+import useAuth from "./hooks/auth";
+import AuthLayout from "./layout/auth.layout";
+import GuestLayout from "./layout/guest.layout";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -17,6 +19,7 @@ export const links: LinksFunction = () => [
 ];
 
 export default function App() {
+  const { authenticated } = useAuth();
 
   return (
     <html lang="en">
@@ -27,7 +30,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        { authenticated ? <AuthLayout /> : <GuestLayout /> }
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

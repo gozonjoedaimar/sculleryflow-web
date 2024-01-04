@@ -1,6 +1,9 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@remix-run/node";
-import { Form } from "@remix-run/react";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
+import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import { checkAuth, updateAuth } from "app/hooks/auth";
+import authenticatedAtom from "app/store/authenticated";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const { authenticated, session } = await checkAuth(request);
@@ -8,8 +11,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const headers = {
         'Set-Cookie': session
     }
-
-    if (authenticated) return redirect('/', { headers });
 
     return json({ authenticated }, { headers });
 }
@@ -23,14 +24,24 @@ export async function action({ request }: ActionFunctionArgs) {
         'Set-Cookie': session
     }
 
-    if (authenticated) return redirect('/', {headers});
-    
     return json({ authenticated }, {headers});
 }
 
 export default function Login() 
 {
+    const { authenticated } = useLoaderData<typeof loader>();
+    const [ authState, setAuthState ] = useAtom(authenticatedAtom);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setAuthState(authenticated);
+        if (authenticated) {
+            navigate('/');
+        }
+    }, [authenticated, setAuthState, navigate]);
+    
     return (
+        authenticated ? null: 
         <>
             <p>Login</p>
             <Form method="post">
