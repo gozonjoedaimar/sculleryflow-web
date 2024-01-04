@@ -3,7 +3,7 @@ import authenticatedAtom from "app/store/authenticated";
 import { useAtom } from "jotai";
 
 type AuthReturn = {
-    authenticated: boolean,
+    authenticated: boolean|null,
     session: string
 }
 
@@ -39,7 +39,7 @@ export async function checkAuth(request: Request): Promise<AuthReturn> {
 export async function updateAuth(request: Request): Promise<AuthReturn> {
     const session = await getSession(request.headers.get("Cookie"));
 
-    session.set("token", "asdfasdfadfasd");
+    session.set("token", "some-random-token");
 
     return {
         authenticated: false,

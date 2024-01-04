@@ -30,7 +30,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        { authenticated ? <AuthLayout /> : <GuestLayout /> }
+        { authenticated ? <AuthLayout /> : (authenticated === null ? null: <GuestLayout />) }
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
