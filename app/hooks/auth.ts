@@ -1,3 +1,4 @@
+import { api_url } from "app/config/api";
 import LoginResponseSchema, { LoginResponse } from "app/config/schema/login";
 import { commitSession, getSession } from "app/sessions"
 import authenticatedAtom from "app/store/authenticated";
@@ -58,7 +59,7 @@ export async function updateAuth(request: Request): Promise<AuthReturn> {
     const session = await getSession(request.headers.get("Cookie"));
     const form = await request.formData();
 
-    const response = await axios.post<LoginResponse>("http://localhost:8000/auth/login", {
+    const response = await axios.post<LoginResponse>(`${api_url}/auth/login`, {
         email: form.get("email"),
         password: form.get("password")
     }).then(resp => resp.data).catch( err => console.log("axios error", err) );

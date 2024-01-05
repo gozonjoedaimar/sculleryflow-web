@@ -1,6 +1,7 @@
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node";
 import { checkAuth } from "app/hooks/auth";
 import axios from "axios";
+import { api_url } from 'app/config/api';
 
 type MenuData = {
 	menu: {
@@ -24,7 +25,7 @@ async function getMenu({ token }: { token?: string|null; })
 {
 	// fetch menu items
 	const menu = await axios
-		.get<MenuData>("http://localhost:8000/api/inventory/kitchen/menu", {
+		.get<MenuData>(`${api_url}/api/inventory/kitchen/menu`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
