@@ -10,6 +10,10 @@ type MenuData = {
 	}[];
 };
 
+type GetMenuOptions = {
+	token?: string|null;
+}
+
 export default async function MenuLoader({ request }: LoaderFunctionArgs) {
 	const { authenticated, sessionHeaders, token } = await checkAuth(request);
 
@@ -21,7 +25,7 @@ export default async function MenuLoader({ request }: LoaderFunctionArgs) {
 	return json({ authenticated, menu }, sessionHeaders);
 }
 
-async function getMenu({ token }: { token?: string|null; })
+async function getMenu({ token }: GetMenuOptions)
 {
 	// fetch menu items
 	const menu = await axios
