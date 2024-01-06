@@ -18,18 +18,18 @@ export default function Login()
     }, [authenticated, setAuthState, navigate]);
     
     return (
-        authenticated ? null: 
-        <>
-            <p>Login</p>
-            {error && <p className="text-red-500">{error}</p>}
-            <Form method="post">
-                <input type="email" name="email" placeholder="email" />
-                <input type="password" name="password" placeholder="password" />
+        authenticated || authenticated === null ? null: 
+        <div className="login-form">
+            <p>Sign in to Sculleryflow</p>
+            {error && <p className="notif alert">{error}</p>}
+            <Form method="post" className="flex flex-col mt-2 gap-2">
+                <input type="email" name="email" placeholder="E-mail" />
+                <input type="password" name="password" placeholder="Password" />
                 <button
-                    className="border py-1 px-3 rounded-lg bg-blue-500 text-white"
+                    className="btn-primary"
                     type="submit"
                     >Start</button>
             </Form>
-        </>
+        </div>
     );
 }

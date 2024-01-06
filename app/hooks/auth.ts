@@ -59,23 +59,35 @@ export async function updateAuth(request: Request): Promise<AuthReturn> {
     const session = await getSession(request.headers.get("Cookie"));
     const form = await request.formData();
 
-    const response = await axios.post<LoginResponse>(`${api_url}/auth/login`, {
+    const response: LoginResponse | Error = await axios.post<LoginResponse>(`${api_url}/auth/login`, {
         email: form.get("email"),
         password: form.get("password")
-    }).then(resp => resp.data).catch( err => console.log("axios error", err) );
+    }).then(resp => resp.data).catch( (err: Error) => err );
 
     const { success } = LoginResponseSchema.safeParse(response);
 
-    if (!success || !response || !response.session) {
-        session.flash("error", "Invalid credentials");
+    let flash_message = null;
+
+    if (response instanceof Error) {
+        console.log(response.message);
+        flash_message = "Unable to reach server";
+    }
+    else if (!success || (!(response instanceof Error) && !response.session)) {
+        flash_message = "Invalid credentials";
+    }
+
+    if (flash_message) {
+        session.flash("error", flash_message);
         const sessionString = await commitSession(session);
         return {
             authenticated: false, 
             sessionHeaders: setSessionHeaders(sessionString)
         }
     }
-
-    session.set("token", response.session.access_token);
+    
+    if (!(response instanceof Error) && response.session?.access_token) {
+        session.set("token", (response.session.access_token));
+    }
 
     const sessionString = await commitSession(session);
 

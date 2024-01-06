@@ -35,7 +35,7 @@ async function getMenu({ token }: GetMenuOptions)
 			},
 		})
 		.then((resp) => resp.data?.menu)
-		.catch((e) => console.log("fetch menu err:", e));
+		.catch((e: Error) => console.log("fetch menu err:", e.message));
 
     return menu;
 }

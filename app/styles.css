@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html,body
+{
+    @apply h-full;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"]
+{
+    @apply border rounded-lg px-3 py-1
+}
+
+button
+{
+    @apply border rounded-lg px-3 py-1 bg-red-400
+}
+
+button.btn-primary
+{
+    @apply bg-blue-400 text-white
+}
+
+button.btn-secondary
+{
+    @apply bg-green-400 text-white
+}
+
+.notif
+{
+    @apply border px-3 py-1 my-4
+}
+
+.notif.alert {
+    @apply border-red-600 text-red-600 bg-red-100
+}
