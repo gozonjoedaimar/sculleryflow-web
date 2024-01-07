@@ -21,12 +21,21 @@ button
 
 button.btn-primary
 {
-    @apply bg-blue-400 text-white
+    @apply bg-blue-500 text-white
+}
+button.btn-primary:disabled
+{
+    @apply bg-blue-300
 }
 
 button.btn-secondary
 {
     @apply bg-green-400 text-white
+}
+
+.link
+{
+    @apply border-0 p-0 text-blue-400
 }
 
 .notif
