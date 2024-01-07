@@ -1,4 +1,4 @@
-import { Form, useLoaderData, useNavigate } from "@remix-run/react";
+import { Form, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
 import { LoginLoader } from "./loader";
 import authenticatedAtom from "app/store/authenticated";
 import { useAtom } from "jotai";
@@ -9,6 +9,7 @@ export default function Login()
     const { authenticated, error } = useLoaderData<typeof LoginLoader>();
     const [ authState, setAuthState ] = useAtom(authenticatedAtom);
     const navigate = useNavigate();
+    const navigation = useNavigation();
 
     useEffect(() => {
         setAuthState(authenticated);
@@ -28,6 +29,7 @@ export default function Login()
                 <button
                     className="btn-primary"
                     type="submit"
+                    disabled={navigation.state === 'submitting'}
                     >Start</button>
             </Form>
         </div>
