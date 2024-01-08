@@ -4,7 +4,7 @@ import { useTitleMeta } from "app/hooks/title.meta";
 export const loader = async () => {
     return json({
         title: "Kitchen",
-        screen_title: "Manage Kitchen",
+        screen_title: "Manage Kitchen Inventory",
     });
 }
 

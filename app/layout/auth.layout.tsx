@@ -41,10 +41,10 @@ export default function AuthLayout() {
             )}>
                 <header className={twMerge(
                     navigation.state === 'loading' && 'opacity-50 pointer-events-none',
-                    "flex flex-row justify-between items-center mb-4 pb-3 border-b"
+                    "flex flex-row justify-between items-center mb-5 pb-4 border-b"
                 )}>
                     <div className="page-info">
-                        <h2 className="text-lg">{screenTitle || "Dashboard"}</h2>
+                        <h2 className="screen-title text-xl font-semibold text-teal-950">{screenTitle || "Dashboard"}</h2>
                     </div>
                     <nav className="page-settings">
                         <ul>
