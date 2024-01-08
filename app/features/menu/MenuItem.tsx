@@ -2,8 +2,8 @@ import { useLoaderData } from "@remix-run/react";
 import MenuItemLoader from "./menuItemLoader";
 
 export default function MenuItem() {
-    const { item_id } = useLoaderData<typeof MenuItemLoader>();
+    const { item_id, name } = useLoaderData<typeof MenuItemLoader>();
     return (
-        <p>Menu Item: {item_id}</p>
+        <p>Menu Item: {name || item_id}</p>
     );
 }

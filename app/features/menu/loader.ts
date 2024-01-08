@@ -22,7 +22,10 @@ export default async function MenuLoader({ request }: LoaderFunctionArgs) {
 	// fetch menu items
 	const menu = await getMenu({ token });
 
-	return json({ authenticated, menu }, sessionHeaders);
+	return json({
+		title: "Menu",
+		authenticated, menu
+	}, sessionHeaders);
 }
 
 async function getMenu({ token }: GetMenuOptions)
