@@ -19,4 +19,14 @@ export const side_nav: NavItems = {
 		path: "/menu",
         icon: "ri-file-list-3-line",
 	},
+	kitchen: {
+		name: "Kitchen",
+		path: "/kitchen",
+		icon: "ri-knife-line",
+	},
+	stockroom: {
+		name: "Stockroom",
+		path: "/stockroom",
+		icon: "ri-archive-line",
+	},
 };
