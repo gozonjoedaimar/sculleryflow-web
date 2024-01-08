@@ -3,7 +3,8 @@ import { useTitleMeta } from "app/hooks/title.meta";
 
 export const loader = async () => {
     return json({
-        title: "Kitchen"
+        title: "Kitchen",
+        screen_title: "Manage Kitchen",
     });
 }
 
@@ -12,6 +13,6 @@ export const meta = useTitleMeta();
 export default function Kitchen()
 {
     return (
-        <h1>Kitchen</h1>
+        <h1>Kitchen data.</h1>
     );
 }

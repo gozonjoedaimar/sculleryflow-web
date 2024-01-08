@@ -1,9 +1,11 @@
 import { Form, NavLink, Outlet, useNavigation } from "@remix-run/react";
 import { side_nav } from "app/config/navigation";
 import useAuth from "app/hooks/auth";
+import useScreenTitle from "app/hooks/screenTitle";
 import { twMerge } from "tailwind-merge";
 
 export default function AuthLayout() {
+    const screenTitle = useScreenTitle();
     const { authenticated } = useAuth();
     const navigation = useNavigation();
     return (
@@ -39,16 +41,16 @@ export default function AuthLayout() {
             )}>
                 <header className={twMerge(
                     navigation.state === 'loading' && 'opacity-50 pointer-events-none',
-                    "flex flex-row justify-between border-b"
+                    "flex flex-row justify-between items-center mb-4 pb-3 border-b"
                 )}>
                     <div className="page-info">
-                        <h2>Dashboard</h2>
+                        <h2 className="text-lg">{screenTitle || "Dashboard"}</h2>
                     </div>
                     <nav className="page-settings">
                         <ul>
                             <li>
                                 <Form method="post" action="/logout">
-                                    <button type="submit" className="link">Logout</button>
+                                    <button type="submit" className="link text-blue-600">Logout <i className="ri-logout-box-r-line" /></button>
                                 </Form>
                             </li>
                         </ul>
