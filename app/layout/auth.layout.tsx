@@ -20,10 +20,11 @@ export default function AuthLayout() {
                             Object.keys(side_nav).map( (key) => {
                                 const path = side_nav[key].path;
                                 const name = side_nav[key].name;
+                                const icon = side_nav[key].icon;
                                 return <li key={key}><NavLink to={path} className={ ({ isActive }) => twMerge(
                                     isActive && "font-bold text-orange-500 border-r-4 border-orange-500",
-                                    "block w-full py-1 hover:text-orange-500 hover:border-r-4 hover:border-orange-500"
-                                ) }>{name}</NavLink></li>;
+                                    "flex items-center w-full py-1 gap-2 hover:text-orange-500 hover:border-r-4 hover:border-orange-500"
+                                ) }>{icon && <i className={twMerge(icon, "text-xl")} />} {name}</NavLink></li>;
                             })
                         }
                     </ul>
