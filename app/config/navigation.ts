@@ -15,9 +15,5 @@ export const side_nav: NavItems = {
     menu: {
         name: 'Menu',
         path: '/menu'
-    },
-    menu_item: {
-        name: 'Menu Item',
-        path: '/menu/item'
-    },
+    }
 }
