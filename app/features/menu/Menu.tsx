@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 export default function Menu() {
     const { menu } = useLoaderData<typeof MenuLoader>();
 	return (
+		!menu ? <div>No menu available.</div>:
 		<div className="menu-content flex flex-row">
 			<div className="menu-list w-72">
 				<h3 className="mb-5 italic underline">Available Menu:</h3>
