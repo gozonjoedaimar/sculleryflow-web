@@ -7,7 +7,7 @@ export default async function IndexLoader({ request }: LoaderFunctionArgs) {
 	if (!authenticated) return redirect("/login", sessionHeaders);
 
 	return json({ 
-		title: "Home",
+		title: "Dashboard",
 		authenticated
 	}, sessionHeaders);
 }

@@ -9,8 +9,8 @@ type NavItems = {
 }
 
 export const side_nav: NavItems = {
-	home: {
-		name: "Home",
+	dashboard: {
+		name: "Dashboard",
 		path: "/",
 		icon: "ri-home-line",
 	},
