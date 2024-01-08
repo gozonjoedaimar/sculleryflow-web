@@ -29,6 +29,9 @@ export default function AuthLayout() {
                         }
                     </ul>
                 </nav>
+                <footer className="mt-auto">
+                    <p className="text-sm italic">Version 0.1.0</p>
+                </footer>
             </div>
             <div className={twMerge(
                 "content-area",
