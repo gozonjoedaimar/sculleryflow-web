@@ -2,12 +2,21 @@ import { Form, NavLink, Outlet, useNavigation } from "@remix-run/react";
 import { side_nav } from "app/config/navigation";
 import useAuth from "app/hooks/auth";
 import useScreenTitle from "app/hooks/screenTitle";
+import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 export default function AuthLayout() {
+    const [isPageLoad, setIsPageLoad] = useState(false);
     const screenTitle = useScreenTitle();
     const { authenticated } = useAuth();
     const navigation = useNavigation();
+    
+    useEffect(() => {
+        if (navigation.state === 'idle') {
+            setIsPageLoad(false);
+        }
+    }, [navigation.state]);
+
     return (
         !authenticated ?
         null:
@@ -23,10 +32,19 @@ export default function AuthLayout() {
                                 const path = side_nav[key].path;
                                 const name = side_nav[key].name;
                                 const icon = side_nav[key].icon;
-                                return <li key={key}><NavLink to={path} className={ ({ isActive }) => twMerge(
-                                    isActive && "font-bold text-orange-500 border-r-4 border-orange-500",
-                                    "flex items-center w-full py-1 gap-2 hover:text-orange-500 hover:border-r-4 hover:border-orange-500"
-                                ) }>{icon && <i className={twMerge(icon, "text-xl")} />} {name}</NavLink></li>;
+                                return <li key={key}>
+                                    <NavLink
+                                        to={path}
+                                        className={ ({ isActive }) => twMerge(
+                                            isActive && "font-bold text-orange-500 border-r-4 border-orange-500",
+                                            "flex items-center w-full py-1 gap-2 hover:text-orange-500 hover:border-r-4 hover:border-orange-500"
+                                        )}
+                                        onClick={ () => setIsPageLoad(true) }
+                                    >
+                                        {icon && <i className={twMerge(icon, "text-xl")} />}
+                                        {name}
+                                    </NavLink>
+                                </li>;
                             })
                         }
                     </ul>
@@ -40,7 +58,7 @@ export default function AuthLayout() {
                 "w-full p-7 rounded-tl-3xl rounded-bl-3xl bg-teal-50",
             )}>
                 <header className={twMerge(
-                    navigation.state === 'loading' && 'opacity-50 pointer-events-none',
+                    navigation.state === 'loading' && isPageLoad && 'opacity-50 pointer-events-none',
                     "flex flex-row justify-between items-center mb-5 pb-4 border-b"
                 )}>
                     <div className="page-info">
@@ -57,7 +75,7 @@ export default function AuthLayout() {
                     </nav>
                 </header>
                 <main className={twMerge(
-                    navigation.state === 'loading' && 'opacity-50 pointer-events-none'
+                    navigation.state === 'loading' && isPageLoad && 'opacity-50 pointer-events-none'
                 )}>
                     <Outlet />
                 </main>
