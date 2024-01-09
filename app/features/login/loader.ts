@@ -4,5 +4,9 @@ import { checkAuth } from "app/hooks/auth";
 export async function LoginLoader({ request }: LoaderFunctionArgs) {
 	const { authenticated, sessionHeaders, flash } = await checkAuth(request);
 
-	return json({ authenticated, error: flash?.error }, sessionHeaders);
+	return json({
+		title: "Login",
+		authenticated,
+		error: flash?.error
+	}, sessionHeaders);
 }

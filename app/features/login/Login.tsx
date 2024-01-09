@@ -1,4 +1,4 @@
-import { Form, useActionData, useFetcher, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
+import { Form, useActionData, useLoaderData, useNavigate, useNavigation } from "@remix-run/react";
 import { LoginLoader } from "./loader";
 import authenticatedAtom from "app/store/authenticated";
 import { useAtom } from "jotai";
@@ -34,10 +34,11 @@ export default function Login()
             <div className="login-form flex flex-row justify-between items-center rounded-3xl overflow-hidden bg-blue-50">
                 <Form method="post" className="flex flex-col w-[500px] px-16">
                     <h1 className="text-3xl">Sign in to Sculleryflow</h1>
+                    <p className="italic text-teal-600">Manage kitchen inventory like never before.</p>
                     {error && <p className="notif alert">{error}</p>}
                     <div className="input-group mt-8">
                         <label htmlFor="email" className="text-lg">E-mail</label>
-                        <input type="email" name="email" id="email" className="large-input" />
+                        <input type="text" name="email" id="email" className="large-input" />
                         {actionData?.errors?.email && <p className="input-error text-sm text-red-600 italic">{actionData.errors.email}</p>}
                     </div>
                     <div className="input-group">
