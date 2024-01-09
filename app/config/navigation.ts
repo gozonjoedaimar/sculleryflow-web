@@ -14,6 +14,11 @@ export const side_nav: NavItems = {
 		path: "/",
 		icon: "ri-home-line",
 	},
+	orders: {
+		name: "Orders",
+		path: "/orders",
+		icon: "ri-restaurant-line",
+	},
 	menu: {
 		name: "Menu",
 		path: "/menu",
