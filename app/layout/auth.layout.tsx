@@ -68,7 +68,10 @@ export default function AuthLayout() {
                         <ul>
                             <li>
                                 <Form method="post" action="/logout">
-                                    <button type="submit" className="link text-blue-600">Logout <i className="ri-logout-box-r-line" /></button>
+                                    <button type="submit" className="link text-blue-800">
+                                        <i className="ri-logout-box-r-line" />
+                                        Logout
+                                    </button>
                                 </Form>
                             </li>
                         </ul>
