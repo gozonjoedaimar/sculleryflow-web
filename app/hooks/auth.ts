@@ -14,6 +14,7 @@ type AuthReturn = {
             "Set-Cookie": string;
         }
     }
+    errors?: { [key:string]: string }
 }
 
 /**
@@ -55,13 +56,53 @@ export async function checkAuth(request: Request): Promise<AuthReturn> {
     }
 }
 
+type FormData = {
+    email: FormDataEntryValue|string|null,
+    password: FormDataEntryValue|string|null
+}
+
+type FormErrors = { [key:string]: string, } & Partial<FormData>
+
+function validateForm({ email, password }: FormData): FormErrors {
+    const errors: FormErrors = {};
+    // validate email
+    if (!email) {
+        errors.email = "Email is required";
+    }
+    else if (!`${email}`.includes("@")) {
+        errors.email = "Email is invalid";
+    }
+    // validate password
+    if (!password) {
+        errors.password = "Password is required";
+    }
+    else if (`${password}`.length < 8) {
+        errors.password = "Password must be at least 8 characters";
+    }
+    return errors;
+}
+
 export async function updateAuth(request: Request): Promise<AuthReturn> {
     const session = await getSession(request.headers.get("Cookie"));
     const form = await request.formData();
 
+    const email = form.get("email");
+    const password = form.get("password");
+
+    const errors = validateForm({ email, password });
+
+    if (Object.keys(errors).length > 0) {
+        const sessionString = await commitSession(session);
+        return {
+            authenticated: false, 
+            sessionHeaders: setSessionHeaders(sessionString),
+            errors
+        }
+    }
+
     const response: LoginResponse | Error = await axios.post<LoginResponse>(`${api_url}/auth/login`, {
-        email: form.get("email"),
-        password: form.get("password")
+        email,
+        password
     }).then(resp => resp.data).catch( (err: Error) => err );
 
     const { success } = LoginResponseSchema.safeParse(response);

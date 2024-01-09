@@ -1,0 +1,12 @@
+.large-input {
+    @apply py-3 px-5 text-lg border-teal-800 border-2
+}
+.large-btn {
+    @apply py-3 px-5 text-lg rounded-full
+}
+.input-group {
+    @apply mb-4 space-y-2
+}
+.notif.alert {
+    @apply -mb-3
+}

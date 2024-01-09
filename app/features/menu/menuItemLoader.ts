@@ -13,7 +13,8 @@ export default async function MenuItemLoader({ params }: LoaderFunctionArgs)
     const menuItem = await getMenuItem(item_id);
 
     return {
-        title: `${menuItem?.name || item_id} / Menu`,
+        title: `${menuItem?.name || item_id}`,
+        prefix: "Menu",
         item_id,
         name: menuItem?.name || undefined
     };

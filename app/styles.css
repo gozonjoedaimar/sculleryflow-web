@@ -11,7 +11,7 @@ input[type="text"],
 input[type="email"],
 input[type="password"]
 {
-    @apply border rounded-lg px-3 py-1
+    @apply border rounded-2xl
 }
 
 button
@@ -35,7 +35,7 @@ button.btn-secondary
 
 .link
 {
-    @apply border-0 p-0 text-blue-400
+    @apply border-0 p-0
 }
 
 .notif
@@ -45,4 +45,7 @@ button.btn-secondary
 
 .notif.alert {
     @apply border-red-600 text-red-600 bg-red-100
+}
+.input-group {
+    @apply flex flex-col
 }
