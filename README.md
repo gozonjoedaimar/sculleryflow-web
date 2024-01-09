@@ -1,38 +1,50 @@
-# Welcome to Remix!
+# sculleryflow-web
 
-- [Remix Docs](https://remix.run/docs)
+Manage kitchen inventory like never before.
 
-## Development
+## Getting Started
 
-From your terminal:
+### Prerequisites
+
+- [Node.js](https://nodejs.org/en/) (v18.17.0)
+
+### Installing
+
+1. Clone the repo
+
+```sh
+git clone https://github.com/gozonjoedaimar/sculleryflow-web.git
+```
+
+2. Install NPM packages
+
+```sh
+cd sculleryflow-web
+npm install
+```
+
+3. Create a `.env` file in the root directory. Copy the contents of `.env.example` into `.env` and modify the values as needed:
+
+```sh
+cp .env.example .env
+```
+
+4. Start the server
 
 ```sh
 npm run dev
 ```
 
-This starts your app in development mode, rebuilding assets on file changes.
+### Production
 
-## Deployment
-
-First, build your app for production:
+1. Build the project
 
 ```sh
 npm run build
 ```
 
-Then run the app in production mode:
+2. Start the server
 
 ```sh
 npm start
 ```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `remix build`
-
-- `build/`
-- `public/build/`
