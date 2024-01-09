@@ -7,7 +7,7 @@ export default function GuestLayout() {
             className={twMerge(
                 "guest-layout",
                 "h-full",
-                "flex items-center justify-center"
+                "bg-gradient-to-br from-teal-800 to-teal-950",
             )}
         >
             <Outlet />
