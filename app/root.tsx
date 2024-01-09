@@ -7,12 +7,14 @@ import {
   Meta,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "@remix-run/react";
 
 import stylesheet from "./styles.css";
 import useAuth from "./hooks/auth";
 import AuthLayout from "./layout/auth.layout";
 import GuestLayout from "./layout/guest.layout";
+import GuestOnly from "./config/routes/guest";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -21,6 +23,7 @@ export const links: LinksFunction = () => [
 
 export default function App() {
   const { authenticated } = useAuth();
+  const location = useLocation();
 
   return (
     <html lang="en">
@@ -31,7 +34,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        { authenticated ? <AuthLayout /> : (authenticated === null ? null: <GuestLayout />) }
+        { authenticated ? <AuthLayout /> : (authenticated === null && !GuestOnly.includes(location.pathname) ? null: <GuestLayout />) }
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
