@@ -111,10 +111,10 @@ export async function updateAuth(request: Request): Promise<AuthReturn> {
 
     if (response instanceof Error) {
         console.log(response.message);
-        flash_message = "Unable to reach server";
+        flash_message = "Unable to reach server.";
     }
     else if (!success || (!(response instanceof Error) && !response.session)) {
-        flash_message = "Invalid credentials";
+        flash_message = "Email and password do not match.";
     }
 
     if (flash_message) {

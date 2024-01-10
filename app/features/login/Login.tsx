@@ -2,7 +2,7 @@ import { Form, useActionData, useLoaderData, useNavigate, useNavigation } from "
 import { LoginLoader } from "./loader";
 import authenticatedAtom from "app/store/authenticated";
 import { useAtom } from "jotai";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./style.css";
 import banner from './login-banner.jpg';
 
@@ -20,6 +20,8 @@ export default function Login()
     const [ authState, setAuthState ] = useAtom(authenticatedAtom);
     const navigate = useNavigate();
     const navigation = useNavigation();
+    const email = useRef<HTMLInputElement>(null);
+    const [email_value, setEmail] = useState<string>();
 
     useEffect(() => {
         setAuthState(authenticated);
@@ -38,7 +40,8 @@ export default function Login()
                     {error && <p className="notif alert">{error}</p>}
                     <div className="input-group mt-8">
                         <label htmlFor="email" className="text-lg">E-mail</label>
-                        <input type="text" name="email" id="email" className="large-input" />
+                        <input type="email" name="email" id="email" ref={email} onChange={ e => setEmail(e.target.value) } className="large-input" />
+                        { email?.current?.validationMessage && <p className="input-error text-sm text-red-600 italic">{email.current.validationMessage}</p> }
                         {actionData?.errors?.email && <p className="input-error text-sm text-red-600 italic">{actionData.errors.email}</p>}
                     </div>
                     <div className="input-group">
