@@ -60,9 +60,10 @@ export default function AuthLayout() {
             </div>
             <div className={twMerge(
                 "content-area",
-                "w-full overflow-auto p-7 rounded-tl-3xl rounded-bl-3xl bg-teal-50",
+                "flex flex-col w-full overflow-auto p-7 rounded-tl-3xl rounded-bl-3xl bg-teal-50",
             )}>
                 <header className={twMerge(
+                    "flex-grow-0",
                     navigation.state === 'loading' && isPageLoad && 'opacity-50 pointer-events-none',
                     "flex flex-row justify-between items-center mb-5 pb-4 border-b"
                 )}>
@@ -83,6 +84,7 @@ export default function AuthLayout() {
                     </nav>
                 </header>
                 <main className={twMerge(
+                    "flex-grow overflow-auto",
                     navigation.state === 'loading' && isPageLoad && 'opacity-50 pointer-events-none'
                 )}>
                     <Outlet />
