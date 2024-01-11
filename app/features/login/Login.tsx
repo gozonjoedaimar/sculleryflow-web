@@ -43,7 +43,7 @@ export default function Login()
         } : {} }>
             <div className={twMerge(
                 "login-form z-10 flex flex-row justify-between items-center rounded-3xl overflow-hidden bg-blue-50",
-                isMobile && "bg-opacity-90",
+                isMobile && "bg-gradient-to-br from-teal-800 to-teal-950 text-white opacity-90",
                 (notMedium && !isMobile) && "rounded-none"
             )}>
                 <Form method="post" className={twMerge(
@@ -51,18 +51,18 @@ export default function Login()
                     isMobile && "w-full p-8"
                 )}>
                     <h1 className="text-3xl">Sign in to Sculleryflow</h1>
-                    <p className="italic text-teal-600">Manage kitchen inventory like never before.</p>
+                    <p className="italic text-teal-200 sm:text-teal-700">Manage kitchen inventory like never before.</p>
                     {error && <p className="notif alert">{error}</p>}
                     <div className="input-group mt-8">
                         <label htmlFor="email" className="text-lg">E-mail</label>
                         <input type="email" name="email" id="email" ref={email} onChange={ e => setEmail(e.target.value) } className="large-input" />
-                        { email?.current?.validationMessage && <p className="input-error text-sm text-red-600 italic">{email.current.validationMessage}</p> }
-                        {actionData?.errors?.email && <p className="input-error text-sm text-red-600 italic">{actionData.errors.email}</p>}
+                        { email?.current?.validationMessage && <p className="input-error">{email.current.validationMessage}</p> }
+                        {actionData?.errors?.email && <p className="input-error">{actionData.errors.email}</p>}
                     </div>
                     <div className="input-group">
                         <label htmlFor="password" className="text-lg">Password</label>
                         <input type="password" name="password" id="password" className="large-input" />
-                        {actionData?.errors?.password && <p className="input-error text-sm text-red-600 italic">{actionData.errors.password}</p>}
+                        {actionData?.errors?.password && <p className="input-error">{actionData.errors.password}</p>}
                     </div>
                     <button
                         className="btn-primary large-btn mt-4"
