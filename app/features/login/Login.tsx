@@ -7,6 +7,7 @@ import "./style.css";
 import banner from './login-banner.jpg';
 import useWindowSize from "app/hooks/windowsize";
 import { twMerge } from "tailwind-merge";
+import logo from 'app/layout/assets/logo64.png';
 
 type ActionFormData = {
     errors: {
@@ -47,9 +48,10 @@ export default function Login()
                 (notMedium && !isMobile) && "rounded-none"
             )}>
                 <Form method="post" className={twMerge(
-                    "flex flex-col w-[500px] px-16",
+                    "flex flex-col items-center w-[500px] px-16",
                     isMobile && "w-full p-8"
                 )}>
+                    <img src={logo} alt="Sculleryflow Logo" className="w-[64px] mb-4" />
                     <h1 className="text-3xl">Sign in to Sculleryflow</h1>
                     <p className="italic text-teal-200 sm:text-teal-700">Manage kitchen inventory like never before.</p>
                     {error && <p className="notif alert">{error}</p>}
@@ -65,7 +67,7 @@ export default function Login()
                         {actionData?.errors?.password && <p className="input-error">{actionData.errors.password}</p>}
                     </div>
                     <button
-                        className="btn-primary large-btn mt-4"
+                        className="btn-primary large-btn mt-4 w-full"
                         type="submit"
                         disabled={navigation.state === 'submitting'}
                         >Login</button>
