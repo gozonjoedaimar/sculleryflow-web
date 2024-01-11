@@ -6,7 +6,7 @@ export default function GuestLayout() {
         <div
             className={twMerge(
                 "guest-layout",
-                "h-full",
+                "h-full overflow-auto",
                 "bg-gradient-to-br from-teal-800 to-teal-950",
             )}
         >
