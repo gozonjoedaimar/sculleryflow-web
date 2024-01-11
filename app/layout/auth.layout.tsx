@@ -60,12 +60,12 @@ export default function AuthLayout() {
             </div>
             <div className={twMerge(
                 "content-area",
-                "flex flex-col w-full overflow-auto p-7 rounded-tl-3xl rounded-bl-3xl bg-teal-50",
+                "flex flex-col w-full overflow-auto rounded-tl-3xl rounded-bl-3xl bg-teal-50",
             )}>
                 <header className={twMerge(
-                    "flex-grow-0",
+                    "flex-grow-0 mt-6 px-6 pb-5",
                     navigation.state === 'loading' && isPageLoad && 'opacity-50 pointer-events-none',
-                    "flex flex-row justify-between items-center mb-5 pb-4 border-b"
+                    "flex flex-row justify-between items-center border-b"
                 )}>
                     <div className="page-info">
                         <h2 className="screen-title text-xl font-semibold text-teal-950">{screenTitle || "Dashboard"}</h2>
