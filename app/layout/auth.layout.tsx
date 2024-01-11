@@ -5,6 +5,7 @@ import useScreenTitle from "app/hooks/screenTitle";
 import useWindowSize from "app/hooks/windowsize";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import logo from './assets/logo48.png';
 
 export default function AuthLayout() {
     const [isPageLoad, setIsPageLoad] = useState(false);
@@ -26,9 +27,12 @@ export default function AuthLayout() {
         <div className={twMerge(
             "dashboard-layout h-full flex flex-row bg-teal-950"
         )}>
-            <div className="sidebar sm:w-72 flex flex-col p-7 pr-0 overflow-auto text-white">
-                <div className="app-info text-2xl mb-8 -ml-[3px] sm:ml-0">
-                    <h1>{isMobile?"SF":"Sculleryflow"}</h1>
+            <div className="sidebar sm:w-80 flex flex-col p-7 pr-0 overflow-auto text-white">
+                <div className="app-info text-2xl mb-6 sm:mb-8">
+                    <h1 className="flex flex-col items-center w-fit -ml-[6px] gap-1 sm:-ml-1 sm:flex-row sm:gap-2">
+                        <img src={logo} alt="Sculleryflow Logo" className="w-[32px]" />
+                        {isMobile?"SF":"Sculleryflow"}
+                    </h1>
                 </div>
                 <nav className="mb-8">
                     <ul className="flex flex-col gap-3">
@@ -55,7 +59,7 @@ export default function AuthLayout() {
                     </ul>
                 </nav>
                 <footer className="mt-auto">
-                    <p className="-ml-1 pr-9 sm:pr-0 sm:ml-0 text-sm italic">{!isMobile && "Version"} {version}</p>
+                    <p className="-ml-2 pr-9 sm:pr-0 sm:ml-0 text-sm italic">{isMobile ? "v": "Version "}{version}</p>
                 </footer>
             </div>
             <div className={twMerge(

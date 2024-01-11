@@ -5,7 +5,7 @@
     @apply py-3 px-5 text-lg rounded-full
 }
 .input-group {
-    @apply mb-4 space-y-2
+    @apply w-full mb-4 space-y-2
 }
 .notif.alert {
     @apply -mb-3
