@@ -6,10 +6,10 @@ export default function Menu() {
     const { menu } = useLoaderData<typeof MenuLoader>();
 	return (
 		!menu ? <div>No menu available.</div>:
-		<div className="menu-content flex flex-row space-x-6">
-			<div className="menu-list w-72">
+		<div className="menu-content flex flex-row space-x-6 px-6 py-6 h-full">
+			<div className="menu-list w-72 flex flex-col">
 				<h3 className="mb-3 pl-10 py-2 -ml-7 uppercase bg-blue-800 text-white rounded-tr-xl rounded-br-xl">Available Menu:</h3>
-				<ul className="space-y-3">
+				<ul className="overflow-auto space-y-3">
 					{menu?.map((item) => {
 						return (
 							<li key={item._id} className="border-b border-blue-200">
@@ -22,7 +22,7 @@ export default function Menu() {
 					})}
 				</ul>
 			</div>
-			<div className="menu-item bg-blue-200 w-full rounded-2xl p-5">
+			<div className="menu-item overflow-auto bg-blue-200 w-full rounded-2xl p-5">
 				<Outlet />
 			</div>
 		</div>
