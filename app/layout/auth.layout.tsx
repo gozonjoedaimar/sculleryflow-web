@@ -84,7 +84,7 @@ export default function AuthLayout() {
                     </nav>
                 </header>
                 <main className={twMerge(
-                    "flex-grow overflow-auto",
+                    "relative flex-grow overflow-auto",
                     navigation.state === 'loading' && isPageLoad && 'opacity-50 pointer-events-none'
                 )}>
                     <Outlet />
