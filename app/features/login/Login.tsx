@@ -5,6 +5,8 @@ import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import "./style.css";
 import banner from './login-banner.jpg';
+import useWindowSize from "app/hooks/windowsize";
+import { twMerge } from "tailwind-merge";
 
 type ActionFormData = {
     errors: {
@@ -22,6 +24,7 @@ export default function Login()
     const navigation = useNavigation();
     const email = useRef<HTMLInputElement>(null);
     const [email_value, setEmail] = useState<string>();
+    const { isMobile, notMedium } = useWindowSize();
 
     useEffect(() => {
         setAuthState(authenticated);
@@ -32,9 +35,21 @@ export default function Login()
     
     return (
         authenticated || authenticated === null ? null: 
-        <div className="h-full flex items-center justify-center">
-            <div className="login-form flex flex-row justify-between items-center rounded-3xl overflow-hidden bg-blue-50">
-                <Form method="post" className="flex flex-col w-[500px] px-16">
+        <div className={twMerge(
+            "min-h-full flex items-center justify-center",
+            isMobile && "px-4 bg-cover bg-center bg-no-repeat"
+        )} style={ isMobile ? {
+            backgroundImage: `url(${banner})`,
+        } : {} }>
+            <div className={twMerge(
+                "login-form z-10 flex flex-row justify-between items-center rounded-3xl overflow-hidden bg-blue-50",
+                isMobile && "bg-opacity-90",
+                (notMedium && !isMobile) && "rounded-none"
+            )}>
+                <Form method="post" className={twMerge(
+                    "flex flex-col w-[500px] px-16",
+                    isMobile && "w-full p-8"
+                )}>
                     <h1 className="text-3xl">Sign in to Sculleryflow</h1>
                     <p className="italic text-teal-600">Manage kitchen inventory like never before.</p>
                     {error && <p className="notif alert">{error}</p>}
@@ -55,9 +70,9 @@ export default function Login()
                         disabled={navigation.state === 'submitting'}
                         >Login</button>
                 </Form>
-                <div className="login-banner w-72">
+                { !isMobile && <div className="login-banner w-72">
                     <img src={banner} alt="Login Banner" />
-                </div>
+                </div>}
             </div>
         </div>
     );
