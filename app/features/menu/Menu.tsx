@@ -1,15 +1,44 @@
-import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import { NavLink, Outlet, useLoaderData, useMatches } from "@remix-run/react";
 import MenuLoader from "./loader";
 import { twMerge } from "tailwind-merge";
+import { useEffect, useState } from "react";
+import useWindowSize from "app/hooks/windowsize";
 
 export default function Menu() {
     const { menu } = useLoaderData<typeof MenuLoader>();
+	const matches = useMatches().pop();
+	const [openContent, setOpenContent] = useState(false);
+	const { isMedium } = useWindowSize();
+
+	useEffect(() => {
+		if (!isMedium && matches?.params.item_id) {
+			setOpenContent(true);
+		}
+		else if (isMedium) {
+			setOpenContent(false);
+		}
+		return () => {
+			setOpenContent(false);
+		}
+	}, [matches, isMedium]);
+
 	return (
 		!menu ? <div>No menu available.</div>:
-		<div className="menu-content flex flex-row space-x-6 px-6 py-6 h-full">
-			<div className="menu-list w-72 flex flex-col">
-				<h3 className="mb-3 pl-10 py-2 -ml-7 uppercase bg-blue-800 text-white rounded-tr-xl rounded-br-xl">Available Menu:</h3>
-				<ul className="overflow-auto space-y-3">
+		<div className="menu-content flex flex-row px-6 py-6 h-full">
+			<div className={twMerge(
+				"menu-list w-full md:w-72 flex flex-col",
+				openContent && "w-fit absolute pt-2"
+			)}>
+				<h3 className={twMerge(
+					"max-w-xs mb-3 pl-10 py-2 -ml-7 uppercase bg-blue-800 text-white rounded-tr-xl rounded-br-xl",
+					openContent && "w-fit pr-3"
+				)}>{
+					openContent ? <button type="button" onClick={ () => setOpenContent(false) }>Menu</button>:"Available Menu:"
+				}</h3>
+				<ul className={twMerge(
+					"overflow-auto space-y-3",
+					openContent && "hidden md:block"
+				)}>
 					{menu?.map((item) => {
 						return (
 							<li key={item._id} className="border-b border-blue-200">
@@ -22,7 +51,10 @@ export default function Menu() {
 					})}
 				</ul>
 			</div>
-			<div className="menu-item overflow-auto bg-blue-200 w-full rounded-2xl p-5">
+			<div className={twMerge(
+				"menu-item overflow-auto bg-white border border-slate-300 w-full rounded-2xl ml-4 p-5 hidden md:block",
+				openContent && "block ml-0"
+			)}>
 				<Outlet />
 			</div>
 		</div>
