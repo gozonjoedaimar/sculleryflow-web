@@ -2,6 +2,7 @@ import { Form, NavLink, Outlet, useNavigation } from "@remix-run/react";
 import { side_nav } from "app/config/navigation";
 import useAuth from "app/hooks/auth";
 import useScreenTitle from "app/hooks/screenTitle";
+import useWindowSize from "app/hooks/windowsize";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -10,6 +11,8 @@ export default function AuthLayout() {
     const screenTitle = useScreenTitle();
     const { authenticated } = useAuth();
     const navigation = useNavigation();
+    const { isMobile } = useWindowSize();
+    const version = "0.1.0";
     
     useEffect(() => {
         if (navigation.state === 'idle') {
@@ -20,12 +23,14 @@ export default function AuthLayout() {
     return (
         !authenticated ?
         null:
-        <div className="dashboard-layout h-full flex flex-row bg-teal-950">
-            <div className="sidebar w-72 flex flex-col p-7 pr-0 text-white">
-                <div className="app-info text-2xl mb-8">
-                    <h1>Sculleryflow</h1>
+        <div className={twMerge(
+            "dashboard-layout h-full flex flex-row bg-teal-950"
+        )}>
+            <div className="sidebar sm:w-72 flex flex-col p-7 pr-0 overflow-auto text-white">
+                <div className="app-info text-2xl mb-8 -ml-[3px] sm:ml-0">
+                    <h1>{isMobile?"SF":"Sculleryflow"}</h1>
                 </div>
-                <nav>
+                <nav className="mb-8">
                     <ul className="flex flex-col gap-3">
                         {
                             Object.keys(side_nav).map( (key) => {
@@ -42,7 +47,7 @@ export default function AuthLayout() {
                                         onClick={ () => setIsPageLoad(true) }
                                     >
                                         {icon && <i className={twMerge(icon, "text-xl")} />}
-                                        {name}
+                                        {!isMobile && name}
                                     </NavLink>
                                 </li>;
                             })
@@ -50,14 +55,15 @@ export default function AuthLayout() {
                     </ul>
                 </nav>
                 <footer className="mt-auto">
-                    <p className="text-sm italic">Version 0.1.0</p>
+                    <p className="-ml-1 pr-9 sm:pr-0 sm:ml-0 text-sm italic">{!isMobile && "Version"} {version}</p>
                 </footer>
             </div>
             <div className={twMerge(
                 "content-area",
-                "w-full p-7 rounded-tl-3xl rounded-bl-3xl bg-teal-50",
+                "flex flex-col w-full overflow-auto p-7 rounded-tl-3xl rounded-bl-3xl bg-teal-50",
             )}>
                 <header className={twMerge(
+                    "flex-grow-0",
                     navigation.state === 'loading' && isPageLoad && 'opacity-50 pointer-events-none',
                     "flex flex-row justify-between items-center mb-5 pb-4 border-b"
                 )}>
@@ -78,6 +84,7 @@ export default function AuthLayout() {
                     </nav>
                 </header>
                 <main className={twMerge(
+                    "flex-grow overflow-auto",
                     navigation.state === 'loading' && isPageLoad && 'opacity-50 pointer-events-none'
                 )}>
                     <Outlet />
