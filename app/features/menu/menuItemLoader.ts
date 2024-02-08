@@ -6,17 +6,31 @@ type RequestParam = {
     item_id: string
 }
 
+type MenuItemData = {
+    _id?: string;
+    name: string;
+    items: {
+        _id?: string,
+        name: string
+    }[],
+    procedure: {
+        step: string
+    }[]
+}
+
 export default async function MenuItemLoader({ params }: LoaderFunctionArgs)
 {
     const { item_id } = params as RequestParam;
 
-    const menuItem = await getMenuItem(item_id);
+    const { name, items, procedure } = (await getMenuItem(item_id)) || {};
 
     return {
-        title: `${menuItem?.name || item_id}`,
+        title: `${name || item_id}`,
         prefix: "Menu",
         item_id,
-        name: menuItem?.name || undefined
+        name: name || undefined,
+        items: items || [],
+        procedure: procedure || []
     };
 }
 
@@ -25,10 +39,10 @@ type MenuItem = {
     name: string;
 }
 
-async function getMenuItem(item_id: string)
+async function getMenuItem(item_id: string): Promise<MenuItemData|null>
 {
-    const menuItem = await HttpClient.get<MenuItem>(`${api_url}/api/inventory/kitchen/menu/${item_id}`)
+    const menuItem = await HttpClient.get<MenuItemData>(`${api_url}/api/menu/${item_id}`)
         .then( res => res.data ).catch( (e) => console.log(e.message) );
 
-    return menuItem;
+    return menuItem || null;
 }
