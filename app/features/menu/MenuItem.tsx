@@ -2,31 +2,11 @@ import { useLoaderData } from "@remix-run/react";
 import MenuItemLoader from "./menuItemLoader";
 
 export default function MenuItem() {
-    const { item_id, name } = useLoaderData<typeof MenuItemLoader>();
+    const { item_id, name, items, procedure } = useLoaderData<typeof MenuItemLoader>();
 
-    const commonIngredients = [
-        "Salt",
-        "Pepper",
-        "Garlic",
-        "Onions",
-        "Olive Oil",
-        "Butter",
-        "Eggs",
-        "Flour",
-        "Sugar",
-        "Milk",
-    ];
+    const commonIngredients = items;
 
-    const commonProcedures = [
-        "Gather all ingredients",
-        "Preheat the oven if necessary",
-        "Prepare ingredients (wash, chop, etc.)",
-        "Mix ingredients in the specified order",
-        "Cook on the stove or bake in the oven",
-        "Check for doneness",
-        "Let the dish cool",
-        "Serve the dish",
-    ];
+    const commonProcedures = procedure.map((item) => item.step);
 
     return (
         <>
@@ -34,20 +14,22 @@ export default function MenuItem() {
             <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
                 <div className="ingredients-list mt-6">
                     <h4 className="italic mb-2">Ingredients:</h4>
+                    { commonIngredients.length === 0 && <p className="text-slate-500 text-sm"><em>No ingredient listed.</em></p>}
                     <ul className="ml-8 list-disc">
                         {
-                            commonIngredients.map((item, key) => {
-                                return <li key={`${key}`} className="text-slate-500">{item}</li>
+                            commonIngredients.map((item) => {
+                                return <li key={item._id} className="text-slate-500">{item.name}</li>
                             })
                         }
                     </ul>
                 </div>
                 <div className="procedures mt-8">
                     <h4 className="italic mb-2">Procedure:</h4>
+                    { commonProcedures.length === 0 && <p className="text-slate-500 text-sm"><em>No procedure listed.</em></p>}
                     <ol className="ml-8 list-decimal">
                         {
                             commonProcedures.map((item, key) => {
-                                return <li key={`${key}`} className="text-slate-500">{item}</li>
+                                return <li key={`${key + 1}-1`} className="text-slate-500">{item}</li>
                             })
                         }
                     </ol>

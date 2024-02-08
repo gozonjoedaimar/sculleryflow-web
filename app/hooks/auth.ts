@@ -1,5 +1,6 @@
 import { api_url } from "app/config/api";
 import LoginResponseSchema, { LoginResponse } from "app/config/schema/login";
+import HttpClient from "app/helpers/ApiClient";
 import { commitSession, getSession } from "app/sessions"
 import authenticatedAtom from "app/store/authenticated";
 import axios from "axios";
@@ -48,8 +49,10 @@ export async function checkAuth(request: Request): Promise<AuthReturn> {
     
     const sessionString = await commitSession(session);
 
+    HttpClient.setToken(session.get("token")?.toString() || "");
+
     return {
-        authenticated: !!session.get("token"),
+        authenticated: !!(await getUserData(session.get("token")?.toString())),
         token: session.get("token"),
         flash,
         sessionHeaders: setSessionHeaders(sessionString)
@@ -133,7 +136,7 @@ export async function updateAuth(request: Request): Promise<AuthReturn> {
     const sessionString = await commitSession(session);
 
     return {
-        authenticated: !!session.get("token"),
+        authenticated: !!(await getUserData(session.get("token")?.toString())),
         sessionHeaders: setSessionHeaders(sessionString)
     }
 }
@@ -145,4 +148,14 @@ function setSessionHeaders(session: string)
             "Set-Cookie": session
         }
     }
+}
+
+// get user data
+async function getUserData(token?: string) {
+    console.log(token);
+    const user = await HttpClient.post<{ user: Record<string, string> }>(`${api_url}/auth/user`)
+    .then(resp => resp.data.user)
+    .catch( e => console.log((e as Error).message) )
+
+    return user;
 }
