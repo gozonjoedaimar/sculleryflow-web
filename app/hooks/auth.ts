@@ -49,7 +49,7 @@ export async function checkAuth(request: Request): Promise<AuthReturn> {
     const sessionString = await commitSession(session);
 
     return {
-        authenticated: !!session.get("token"),
+        authenticated: !!(await getUserData(session.get("token")?.toString())),
         token: session.get("token"),
         flash,
         sessionHeaders: setSessionHeaders(sessionString)
@@ -133,7 +133,7 @@ export async function updateAuth(request: Request): Promise<AuthReturn> {
     const sessionString = await commitSession(session);
 
     return {
-        authenticated: !!session.get("token"),
+        authenticated: !!(await getUserData(session.get("token")?.toString())),
         sessionHeaders: setSessionHeaders(sessionString)
     }
 }
@@ -145,4 +145,18 @@ function setSessionHeaders(session: string)
             "Set-Cookie": session
         }
     }
+}
+
+// get user data
+async function getUserData(token?: string) {
+    console.log(token);
+    const user = await axios.post<{ user: Record<string, string> }>(`${api_url}/auth/user`, {}, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    .then(resp => resp.data.user)
+    .catch( e => console.log((e as Error).message) )
+
+    return user;
 }
