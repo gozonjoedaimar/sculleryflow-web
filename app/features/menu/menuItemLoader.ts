@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { api_url } from "app/config/api";
-import axios from "axios";
+import HttpClient from "app/helpers/ApiClient";
 
 type RequestParam = {
     item_id: string
@@ -27,7 +27,7 @@ type MenuItem = {
 
 async function getMenuItem(item_id: string)
 {
-    const menuItem = axios.get<MenuItem>(`${api_url}/api/inventory/kitchen/menu/${item_id}`)
+    const menuItem = await HttpClient.get<MenuItem>(`${api_url}/api/inventory/kitchen/menu/${item_id}`)
         .then( res => res.data ).catch( (e) => console.log(e.message) );
 
     return menuItem;
