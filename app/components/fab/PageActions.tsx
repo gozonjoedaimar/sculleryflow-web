@@ -1,3 +1,4 @@
+import { useMatches } from "@remix-run/react";
 import FAB from "./FAB";
 import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -11,6 +12,13 @@ export default function PageActions({ className, children }: PageActionsProps) {
 	const [open, setOpen] = useState(false);
 	const actions = useRef<HTMLDivElement>(null);
     const drawer = useRef<HTMLDivElement>(null);
+	const matches = useMatches();
+
+	useEffect(() => {
+		if (matches.length) {
+			setOpen(false);
+		}
+	}, [matches]);
 
 	useEffect(() => {
 		let timeoutId: NodeJS.Timeout | null = null;

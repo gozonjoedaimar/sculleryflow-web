@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLoaderData, useMatches, useNavigate } from "@remix-run/react";
+import { NavLink, Outlet, useLoaderData, useLocation, useMatches, useNavigate } from "@remix-run/react";
 import MenuLoader from "./loader";
 import { twMerge } from "tailwind-merge";
 import { useEffect, useState } from "react";
@@ -8,22 +8,31 @@ import ActionButton from "app/components/fab/ActionButton";
 
 export default function Menu() {
 	const { item_id } = (useMatches().pop()?.params || {}) as { item_id?: string };
+	const basePath = (useLocation().pathname || '').split('/').slice(-1).join();
     const { menu } = useLoaderData<typeof MenuLoader>();
 	const [openContent, setOpenContent] = useState(false);
 	const { isMedium } = useWindowSize();
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!isMedium && !!item_id) {
+		if (['add','edit'].includes(basePath)) {
+			if (isMedium) {
+				setOpenContent(false);
+			}
+			else {
+				setOpenContent(true);
+			}
+		}
+		else if (!isMedium && !!item_id) {
 			setOpenContent(true);
 		}
 		else if (isMedium) {
 			setOpenContent(false);
 		}
-		return () => {
+		else if ("menu" === basePath) {
 			setOpenContent(false);
 		}
-	}, [item_id, isMedium]);
+	}, [item_id, basePath, isMedium]);
 
 	return (
 		!menu ? <div>No menu available.</div>:
@@ -62,10 +71,11 @@ export default function Menu() {
 			</div>
 			<PageActions className={twMerge(
 				"absolute right-5 bottom-5 md:bottom-10 md:right-10 2xl:bottom-12 2xl:right-12",
-				!!item_id && "right-9 bottom-9"
+				openContent && "right-9 bottom-9"
 			)}>
-				<ActionButton onClick={ () => { navigate('add') } }>New</ActionButton>
-				{ !!item_id && <ActionButton onClick={ () => { navigate(`${item_id}/edit`) } }>Edit</ActionButton>}
+				{ ('add' === basePath) && <ActionButton onClick={ () => { navigate('/menu') } }>Cancel</ActionButton>}
+				{ ('add' !== basePath) && <ActionButton onClick={ () => { navigate('add') } }>New</ActionButton>}
+				{ (!!item_id && basePath !== 'edit') && <ActionButton onClick={ () => { navigate(`${item_id}/edit`) } }>Edit</ActionButton>}
 			</PageActions>
 		</div>
 	);
