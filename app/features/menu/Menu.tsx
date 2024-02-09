@@ -74,8 +74,8 @@ export default function Menu() {
 				openContent && "right-9 bottom-9"
 			)}>
 				{ ('add' === basePath) && <ActionButton onClick={ () => { navigate('/menu') } }>Cancel</ActionButton>}
-				{ ('add' !== basePath) && <ActionButton onClick={ () => { navigate('add') } }>New</ActionButton>}
-				{ (!!item_id && basePath !== 'edit') && <ActionButton onClick={ () => { navigate(`${item_id}/edit`) } }>Edit</ActionButton>}
+				{ ('add' !== basePath) && <ActionButton className="bg-green-600 text-white hover:bg-green-700/95" onClick={ () => { navigate('add') } }>New</ActionButton>}
+				{ (!!item_id && basePath !== 'edit') && <ActionButton className="bg-blue-600 text-white hover:bg-blue-700/95" onClick={ () => { navigate(`${item_id}/edit`) } }>Edit</ActionButton>}
 			</PageActions>
 		</div>
 	);
