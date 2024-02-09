@@ -135,6 +135,8 @@ export async function updateAuth(request: Request): Promise<AuthReturn> {
 
     const sessionString = await commitSession(session);
 
+    HttpClient.setToken(session.get("token")?.toString() || "");
+
     return {
         authenticated: !!(await getUserData(session.get("token")?.toString())),
         sessionHeaders: setSessionHeaders(sessionString)
@@ -152,7 +154,6 @@ function setSessionHeaders(session: string)
 
 // get user data
 async function getUserData(token?: string) {
-    console.log(token);
     const user = await HttpClient.post<{ user: Record<string, string> }>(`${api_url}/auth/user`)
     .then(resp => resp.data.user)
     .catch( e => console.log((e as Error).message) )
