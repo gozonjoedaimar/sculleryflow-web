@@ -1,17 +1,20 @@
-import { NavLink, Outlet, useLoaderData, useMatches } from "@remix-run/react";
+import { NavLink, Outlet, useLoaderData, useMatches, useNavigate } from "@remix-run/react";
 import MenuLoader from "./loader";
 import { twMerge } from "tailwind-merge";
 import { useEffect, useState } from "react";
 import useWindowSize from "app/hooks/windowsize";
+import PageActions from "app/components/fab/PageActions";
+import ActionButton from "app/components/fab/ActionButton";
 
 export default function Menu() {
+	const { item_id } = (useMatches().pop()?.params || {}) as { item_id?: string };
     const { menu } = useLoaderData<typeof MenuLoader>();
-	const matches = useMatches().pop();
 	const [openContent, setOpenContent] = useState(false);
 	const { isMedium } = useWindowSize();
+	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!isMedium && matches?.params.item_id) {
+		if (!isMedium && !!item_id) {
 			setOpenContent(true);
 		}
 		else if (isMedium) {
@@ -20,11 +23,11 @@ export default function Menu() {
 		return () => {
 			setOpenContent(false);
 		}
-	}, [matches, isMedium]);
+	}, [item_id, isMedium]);
 
 	return (
 		!menu ? <div>No menu available.</div>:
-		<div className="menu-content flex flex-row px-6 py-6 h-full">
+		<div className="menu-content relative flex flex-row px-6 py-6 h-full">
 			<div className={twMerge(
 				"menu-list w-full md:w-72 flex flex-col",
 				openContent && "w-fit absolute pt-2"
@@ -33,7 +36,7 @@ export default function Menu() {
 					"max-w-xs mb-3 pl-10 py-2 -ml-7 uppercase bg-blue-800 text-white rounded-tr-xl rounded-br-xl",
 					openContent && "w-fit pr-3"
 				)}>{
-					openContent ? <button type="button" onClick={ () => setOpenContent(false) }>Menu</button>:"Available Menu:"
+					openContent ? <button type="button" onClick={ () => { navigate('/menu'); } }>Menu</button>:"Available Menu:"
 				}</h3>
 				<ul className={twMerge(
 					"overflow-auto space-y-3",
@@ -57,6 +60,13 @@ export default function Menu() {
 			)}>
 				<Outlet />
 			</div>
+			<PageActions className={twMerge(
+				"absolute right-5 bottom-5 md:bottom-10 md:right-10 2xl:bottom-12 2xl:right-12",
+				!!item_id && "right-9 bottom-9"
+			)}>
+				<ActionButton onClick={ () => { navigate('add') } }>New</ActionButton>
+				{ !!item_id && <ActionButton onClick={ () => { navigate(`${item_id}/edit`) } }>Edit</ActionButton>}
+			</PageActions>
 		</div>
 	);
 }
