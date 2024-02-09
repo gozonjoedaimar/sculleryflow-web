@@ -10,7 +10,7 @@ export default function MenuItem() {
 
     return (
         <>
-            <p className="ml-20 md:ml-0 pb-2 text-lg md:text-center xl:text-left border-b border-black">{name || item_id}</p>
+            <h4 className="ml-20 md:ml-0 pb-2 text-lg md:text-center xl:text-left border-b border-black">{name || item_id}</h4>
             <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
                 <div className="ingredients-list mt-6">
                     <h4 className="italic mb-2">Ingredients:</h4>

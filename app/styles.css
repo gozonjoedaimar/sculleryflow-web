@@ -7,9 +7,9 @@ html,body
     @apply h-full;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"]
+input:not(.default)[type="text"],
+input:not(.default)[type="email"],
+input:not(.default)[type="password"]
 {
     @apply border rounded-2xl
 }
