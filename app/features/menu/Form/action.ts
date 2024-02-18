@@ -33,11 +33,13 @@ async function post({ params, request }: actionArgs) {
     }
     
     // check if item exists
-    const itemExists = !!(await getMenu(params.item_id));
-    if (!is_new && !itemExists) {
-        return json({
-            error: 'Failed to fetch data.'
-        });
+    if (!is_new) {
+        const itemExists = !!(await getMenu(params.item_id));
+        if (!itemExists) {
+            return json({
+                error: 'Failed to fetch data.'
+            });
+        }
     }
 
     const savedItem = await saveItem({
