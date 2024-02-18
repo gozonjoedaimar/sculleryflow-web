@@ -1,8 +1,10 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import MenuItemLoader from "./loader";
+import Edit from "app/components/button_icons/Edit";
 
 export default function MenuItem() {
     const loaderData = useLoaderData<typeof MenuItemLoader>();
+    const navigate = useNavigate();
 
     if ('error' in loaderData) {
         console.log(loaderData.error);
@@ -17,7 +19,10 @@ export default function MenuItem() {
 
     return (
         <>
-            <h4 className="ml-20 md:ml-0 pb-2 text-lg md:text-center xl:text-left border-b border-black">{name || item_id}</h4>
+            <div className="ml-20 md:ml-0 pb-2 flex flex-row items-center gap-2 text-lg md:text-center xl:text-left border-b border-black">
+                <h4 >{name || item_id}</h4>
+                <Edit onClick={ () => navigate('./edit') } />
+            </div>
             <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
                 <div className="ingredients-list mt-6">
                     <h4 className="italic mb-2">Ingredients:</h4>
