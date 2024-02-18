@@ -20,8 +20,13 @@ export default async function action({request, params}: actionArgs) {
 }
 
 async function post({ params, request }: actionArgs) {
+    // get form data
+    const body = await request.formData();
+
+    const is_new = body.get('_action') === 'new';
+    
     // check if item_id is in params
-    if (!('item_id' in params)) {
+    if (!is_new && !('item_id' in params)) {
         return json({
             error: 'Invalid request.'
         })
@@ -29,17 +34,15 @@ async function post({ params, request }: actionArgs) {
     
     // check if item exists
     const itemExists = !!(await getMenu(params.item_id));
-    if (!itemExists) {
+    if (!is_new && !itemExists) {
         return json({
             error: 'Failed to fetch data.'
         });
     }
 
-    // get form data
-    const body = await request.formData();
-
     const savedItem = await saveItem({
-        item_data: params.item_id,
+        is_new,
+        item_id: params.item_id,
         name: body.get('name') as string || ''
     });
 
@@ -49,7 +52,13 @@ async function post({ params, request }: actionArgs) {
         });
     }
 
-    return redirect(`../${params.item_id}`);
+    let id = params?.item_id;
+
+    if ('menu' in savedItem) {
+        id = savedItem.menu.id;
+    }
+
+    return redirect( `../${id}`);
 }
 
 /**
@@ -79,14 +88,22 @@ async function getMenu(item_id: string)
 }
 
 type ItemData = {
-    item_data: string;
+    item_id: string;
     name: string;
+    is_new: boolean;
 }
 
-async function saveItem({ item_data, name }: ItemData) {
-    const query = await HttpClient.post<{ item: { _id: string; } }>(`${api_url}/api/menu/edit/${item_data}`, { name }).then( res => res.data ).catch( e => console.log((e as Error).message) ) || {};
+async function saveItem({ item_id, name, is_new }: ItemData) {
+    let query = null;
+    
+    if (is_new) {
+        query = await HttpClient.post<{ menu: { id: string; } }>(`${api_url}/api/menu/add`, { name }).then( res => res.data ).catch( e => console.log((e as Error).message) ) || {};
+    }
+    else {
+        query = await HttpClient.post<{ item: { _id: string; } }>(`${api_url}/api/menu/edit/${item_id}`, { name }).then( res => res.data ).catch( e => console.log((e as Error).message) ) || {};
+    }
 
-    if ('item' in query) {
+    if ('item' in query || 'menu' in query) {
         return query;
     }
 

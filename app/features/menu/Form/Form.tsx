@@ -54,6 +54,7 @@ function TitleInput({ form, name, id, error, value, label }: TitleInputProps) {
     }, [value]);
     return (
         <div className="flex flex-row items-center gap-2">
+            { !id && <input type="hidden" name="_action" value="new" /> }
             <input ref={menuNameInput} type="text" name={name} id={name} className="default focus:outline-none placeholder:italic" placeholder="Menu Name" />
             { !!label && <label htmlFor={name} className="ml-3 text-sm text-slate-500 italic">({ label })</label> }
             <div className="form-action flex flex-row gap-1">
