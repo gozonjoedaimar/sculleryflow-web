@@ -1,49 +1,59 @@
-import { useLoaderData, useNavigate } from "@remix-run/react"
+import { Form, useActionData, useFetcher, useLoaderData, useNavigate, useNavigation, useSubmit } from "@remix-run/react"
 import Loader from "./loader";
-import { useEffect, useRef } from "react";
+import Action from "./action";
+import { RefObject, useEffect, useRef } from "react";
 import Check from "app/components/button_icons/Check";
 import Close from "app/components/button_icons/Close";
 
-const loader = Loader;
-
-type loaderData = typeof loader;
-
 export default function MenuEditForm() {
-    const { id, menu } = useLoaderData<loaderData>();
-    console.log(menu);
+    const form = useRef<HTMLFormElement>(null);
+    const loaderData = useLoaderData<typeof Loader>();
+    const actionData = useActionData<typeof Action>();
+
+    if ('error' in loaderData) {
+        console.log(loaderData.error);
+        return <p className="text-slate-400 italic text-sm">Failed to fetch data. Please refresh the page and try again.</p>;
+    }
+
+    const { id, menu } = loaderData;
+
     return (
-        <h4 className="ml-20 md:ml-0 pb-2 text-lg md:text-center xl:text-left border-b border-black">
-            {
-                id ? 
-                <TitleInput name="name" value={ menu.name } sub="Edit Menu Item" />:
-                <TitleInput name="name" value="" sub="Add Menu Item" />
-            }
-        </h4>
+        <Form ref={form} method="post">
+            <div className="ml-20 md:ml-0 pb-2 text-lg md:text-center xl:text-left border-b border-black">
+                <TitleInput form={form} name="name" error={ actionData?.error } value={ id? menu.name: ""} label={ id ? "Edit Menu Item": "Add Menu Item"} />
+            </div>
+        </Form>
     )
 }
 
 type TitleInputProps = {
+    form: RefObject<HTMLFormElement>;
     name: string;
     value: string;
-    sub?: string;
+    label?: string;
+    error?: string
 }
 
-function TitleInput({ name, value, sub }: TitleInputProps) {
-    const input = useRef<HTMLInputElement>(null);
+function TitleInput({ form, name, error, value, label }: TitleInputProps) {
+    const menuNameInput = useRef<HTMLInputElement>(null);
     const navigate = useNavigate();
+    const navigation = useNavigation();
+    const submit = useSubmit();
     useEffect(() => {
-        if (input.current instanceof HTMLInputElement) {
-            input.current.value = value;
+        if (menuNameInput.current instanceof HTMLInputElement) {
+            menuNameInput.current.value = value;
         }
     }, [value]);
     return (
         <div className="flex flex-row items-center gap-2">
-            <input ref={input} type="text" name={name} id={name} className="default focus:outline-none placeholder:italic" placeholder="Menu Name" />
-            { !!sub && <label htmlFor={name} className="ml-3 text-sm text-slate-500 italic">({ sub })</label> }
+            <input ref={menuNameInput} type="text" name={name} id={name} className="default focus:outline-none placeholder:italic" placeholder="Menu Name" />
+            { !!label && <label htmlFor={name} className="ml-3 text-sm text-slate-500 italic">({ label })</label> }
             <div className="form-action flex flex-row gap-1">
-                <Check onClick={ () => { navigate(-1) } } />
-                <Close onClick={ () => { navigate(-1) } } />
+                <Check disabled={navigation.state !== 'idle'} onClick={ () => submit(form.current) } />
+                <Close disabled={navigation.state !== 'idle'} onClick={ () => { navigate('..') } } />
             </div>
+            { navigation.state === 'submitting' && <p className="text-slate-400 text-sm">saving...</p> }
+            { navigation.state !== 'submitting' && !!error && <p className="text-red-500 text-sm">{ error }</p> }
         </div>
     )
 }

@@ -22,7 +22,11 @@ export default async function (data: LoaderFunctionArgs) {
     const { item_id } = data.params as Params;
     const query = await HttpClient.get(`${api_url}/api/menu/${item_id}`).then( res => res.data ).catch( e => console.log((e as Error).message) ) || {};
 
-    console.log(query);
+    if ('error' in query) {
+        return  json({
+            error: query.error
+        });
+    }
 
     const menu: MenuData = {
         _id: query._id,
