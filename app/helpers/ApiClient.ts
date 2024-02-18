@@ -23,18 +23,25 @@ class ApiClient {
     return ApiClient.instance;
   }
 
-  public get<T = Record<string, string>>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  public get<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     const setup = { ...config };
     const headers = setup.headers || {};
     headers.Authorization = `Bearer ${this.auth.token}`;
     return this.client.get<T>(url, { ...setup, headers});
   }
 
-  public post<T = Record<string, string>>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  public post<T>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     const setup = { ...config };
     const headers = setup.headers || {};
     headers.Authorization = `Bearer ${this.auth.token}`;
     return this.client.post<T>(url, data, { ...setup, headers});
+  }
+
+  public delete<T>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    const setup = { ...config };
+    const headers = setup.headers || {};
+    headers.Authorization = `Bearer ${this.auth.token}`;
+    return this.client.delete<T>(url, { ...setup, headers });
   }
 
   public setToken(token: string) {
