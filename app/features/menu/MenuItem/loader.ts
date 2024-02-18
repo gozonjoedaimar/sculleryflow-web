@@ -1,4 +1,6 @@
-import { LoaderFunctionArgs } from "@remix-run/node";
+// menu/item/loader.ts
+
+import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { api_url } from "app/config/api";
 import HttpClient from "app/helpers/ApiClient";
 
@@ -15,28 +17,30 @@ type MenuItemData = {
     }[],
     procedure: {
         step: string
-    }[]
+    }[],
+    error?: string
 }
 
 export default async function MenuItemLoader({ params }: LoaderFunctionArgs)
 {
     const { item_id } = params as RequestParam;
 
-    const { name, items, procedure } = (await getMenuItem(item_id)) || {};
+    const { error, name, items, procedure } = (await getMenuItem(item_id)) || {};
 
-    return {
+    if (error) {
+        return json({
+            error,
+        })
+    }
+
+    return json({
         title: `${name || item_id}`,
         prefix: "Menu",
         item_id,
         name: name || undefined,
         items: items || [],
-        procedure: procedure || []
-    };
-}
-
-type MenuItem = {
-    _id: string;
-    name: string;
+        procedure: procedure || [],
+    });
 }
 
 async function getMenuItem(item_id: string): Promise<MenuItemData|null>

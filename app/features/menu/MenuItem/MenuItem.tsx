@@ -1,8 +1,15 @@
 import { useLoaderData } from "@remix-run/react";
-import MenuItemLoader from "./menuItemLoader";
+import MenuItemLoader from "./loader";
 
 export default function MenuItem() {
-    const { item_id, name, items, procedure } = useLoaderData<typeof MenuItemLoader>();
+    const loaderData = useLoaderData<typeof MenuItemLoader>();
+
+    if ('error' in loaderData) {
+        console.log(loaderData.error);
+        return <p className="text-slate-400 italic text-sm">Failed to fetch data. Please refresh the page and try again.</p>;
+    }
+
+    const { item_id, name, items, procedure } = loaderData;
 
     const commonIngredients = items;
 
