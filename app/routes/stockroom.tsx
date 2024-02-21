@@ -1,5 +1,6 @@
 import { json } from "@remix-run/node";
 import { useTitleMeta } from "app/hooks/title.meta";
+import Stockroom from "app/features/stockroom/Stockroom";
 
 export const loader = async () => json({
     title: "Stockroom",
@@ -8,9 +9,4 @@ export const loader = async () => json({
 
 export const meta = useTitleMeta();
 
-export default function Stockroom()
-{
-    return (
-        <h1>Stockroom data.</h1>
-    );
-}
+export default Stockroom;

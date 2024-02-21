@@ -1,5 +1,6 @@
 import { json } from "@remix-run/node";
 import { useTitleMeta } from "app/hooks/title.meta";
+import Orders from "app/features/orders/Orders";
 
 export const loader = () => json({
     title: "Orders",
@@ -8,9 +9,4 @@ export const loader = () => json({
 
 export const meta = useTitleMeta();
 
-export default function Orders()
-{
-    return (
-        <h1>Orders data</h1>
-    );
-}
+export default Orders;

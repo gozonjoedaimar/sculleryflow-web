@@ -71,8 +71,8 @@ function TitleInput({ form, name, id, error, value, label }: TitleInputProps) {
             <input ref={menuNameInput} type="text" name={name} id={name} className="default focus:outline-none placeholder:italic" placeholder="Menu Name" />
             { !!label && <label htmlFor={name} className="ml-3 text-sm text-slate-500 italic">({ label })</label> }
             <div className="form-action flex flex-row gap-1">
-                <Check disabled={navigation.state !== 'idle'} onClick={ () => submit(form.current) } />
-                <Close disabled={navigation.state !== 'idle'} onClick={ () => { navigate((id?`/menu/${id}`:"..")) } } />
+                <Check label="Save" disabled={navigation.state !== 'idle'} onClick={ () => submit(form.current) } />
+                <Close label="Cancel" disabled={navigation.state !== 'idle'} onClick={ () => { navigate((id?`/menu/${id}`:"..")) } } />
             </div>
             { navigation.state === 'submitting' && <p className="text-slate-400 text-sm">saving...</p> }
             { navigation.state !== 'submitting' && !!error && <p className="text-red-500 text-sm">{ error }</p> }

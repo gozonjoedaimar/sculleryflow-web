@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLoaderData, useLocation, useMatches, useNavigate } from "@remix-run/react";
+import { Link, NavLink, Outlet, useLoaderData, useLocation, useMatches, useNavigate } from "@remix-run/react";
 import MenuLoader from "./loader";
 import { twMerge } from "tailwind-merge";
 import { useEffect, useState } from "react";
@@ -35,7 +35,6 @@ export default function Menu() {
 	}, [item_id, basePath, isMedium]);
 
 	return (
-		!menu ? <div>No menu available.</div>:
 		<div className="menu-content relative flex flex-row px-6 py-6 h-full">
 			<div className={twMerge(
 				"menu-list w-full md:w-72 flex flex-col",
@@ -51,6 +50,7 @@ export default function Menu() {
 					"overflow-auto space-y-3",
 					openContent && "hidden md:block"
 				)}>
+					{ menu.length < 1 && <li className="text-slate-400 italic">No menu item available. <Link to={"./add"} className="text-blue-600 underline">Create new?</Link></li>}
 					{menu?.map((item) => {
 						return (
 							<li key={item._id} className="border-b border-blue-200">
