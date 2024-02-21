@@ -6,7 +6,6 @@ import HttpClient from "app/helpers/ApiClient";
 type actionArgs = ActionFunctionArgs & { params: {item_id: string} }
 
 export default async function action({request, params}: actionArgs) {
-    console.log('updating menu');
     switch (request.method) {
         case 'POST':
             return post({request, params} as actionArgs);
@@ -42,10 +41,13 @@ async function post({ params, request }: actionArgs) {
         }
     }
 
+    const procedure = body.getAll('step[]') as string[];
+
     const savedItem = await saveItem({
         is_new,
         item_id: params.item_id,
-        name: body.get('name') as string || ''
+        name: body.get('name') as string || '',
+        procedure: procedure.filter( step => `${step}`.trim() )
     });
 
     if (!savedItem) {
@@ -93,16 +95,17 @@ type ItemData = {
     item_id: string;
     name: string;
     is_new: boolean;
+    procedure?: string[];
 }
 
-async function saveItem({ item_id, name, is_new }: ItemData) {
+async function saveItem({ item_id, name, is_new, procedure }: ItemData) {
     let query = null;
     
     if (is_new) {
-        query = await HttpClient.post<{ menu: { id: string; } }>(`${api_url}/api/menu/add`, { name }).then( res => res.data ).catch( e => console.log((e as Error).message) ) || {};
+        query = await HttpClient.post<{ menu: { id: string; } }>(`${api_url}/api/menu/add`, { name, procedure }).then( res => res.data ).catch( e => console.log((e as Error).message) ) || {};
     }
     else {
-        query = await HttpClient.post<{ item: { _id: string; } }>(`${api_url}/api/menu/edit/${item_id}`, { name }).then( res => res.data ).catch( e => console.log((e as Error).message) ) || {};
+        query = await HttpClient.post<{ item: { _id: string; } }>(`${api_url}/api/menu/edit/${item_id}`, { name, procedure }).then( res => res.data ).catch( e => console.log((e as Error).message) ) || {};
     }
 
     if ('item' in query || 'menu' in query) {
