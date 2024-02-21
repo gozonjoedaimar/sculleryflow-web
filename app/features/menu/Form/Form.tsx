@@ -4,12 +4,18 @@ import Action from "./action";
 import { RefObject, useEffect, useRef } from "react";
 import Check from "app/components/button_icons/Check";
 import Close from "app/components/button_icons/Close";
+import Ingredients from "./Ingredients";
+import Procedure from "./Procedure";
 
 type LoaderData = {
     id: string;
     menu: {
         name: string;
-    }
+        procedure?: {
+            _id?: string;
+            step: string;
+        }[]
+    },
 }
 
 export default function MenuEditForm() {
@@ -28,6 +34,13 @@ export default function MenuEditForm() {
         <Form ref={form} method="post">
             <div className="ml-20 md:ml-0 pb-2 text-lg md:text-center xl:text-left border-b border-black">
                 <TitleInput form={form} name="name" id={id} error={ actionData?.error } value={ id? menu.name: ""} label={ id ? "Edit Menu Item": "Add Menu Item"} />
+            </div>
+
+            <div className="mt-6 lg:grid lg:grid-cols-2 lg:gap-3">
+                <Ingredients />
+                <Procedure data={{
+                    procedure: [...(menu.procedure || [])]
+                }} />
             </div>
         </Form>
     )
