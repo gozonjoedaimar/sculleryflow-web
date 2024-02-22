@@ -15,6 +15,7 @@ import useAuth from "./hooks/auth";
 import AuthLayout from "./layout/auth.layout";
 import GuestLayout from "./layout/guest.layout";
 import GuestOnly from "./config/routes/guest";
+import { ModalContainer, ModalProvider } from "./components/modal/Modal";
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
@@ -34,7 +35,13 @@ export default function App() {
         <Links />
       </head>
       <body>
-        { authenticated ? <AuthLayout /> : (authenticated === null && !GuestOnly.includes(location.pathname) ? null: <GuestLayout />) }
+        { authenticated ?
+          <ModalProvider>
+            <ModalContainer>
+              <AuthLayout />
+            </ModalContainer>
+          </ModalProvider>
+          : (authenticated === null && !GuestOnly.includes(location.pathname) ? null: <GuestLayout />) }
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

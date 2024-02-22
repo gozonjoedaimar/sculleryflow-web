@@ -30,12 +30,12 @@ export default function MenuItem() {
             </div>
             <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
                 <div className="ingredients-list mt-6">
-                    <h4 className="italic mb-2">Ingredients:</h4>
+                    <h4 className="italic mb-2">Ingredients: (WIP)</h4>
                     { commonIngredients.length === 0 && <p className="text-slate-500 text-sm"><em>No ingredient listed.</em></p>}
                     <ul className="ml-8 list-disc">
                         {
                             commonIngredients.map((item) => {
-                                return <li key={item._id} className="text-slate-500">{item.name}</li>
+                                return <li key={item._id} className="text-slate-500"><span className="text-orange-600 inline-block mr-1" title="WIP: no measurement">&frac12; cup</span> {item.name}</li>
                             })
                         }
                     </ul>
