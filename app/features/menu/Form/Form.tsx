@@ -14,8 +14,14 @@ type LoaderData = {
         procedure?: {
             _id?: string;
             step: string;
-        }[]
+        }[],
+        items?: Ingredient[]
     },
+}
+
+type Ingredient = {
+    _id: string;
+    name: string;
 }
 
 export default function MenuEditForm() {
@@ -37,7 +43,7 @@ export default function MenuEditForm() {
             </div>
 
             <div className="mt-6 lg:grid lg:grid-cols-2 lg:gap-3">
-                <Ingredients />
+                <Ingredients data={menu.items || []} />
                 <Procedure data={{
                     procedure: [...(menu.procedure || [])]
                 }} />
