@@ -1,11 +1,9 @@
 import { json } from "@remix-run/node";
 import { useTitleMeta } from "app/hooks/title.meta";
 import Orders from "app/features/orders/Orders";
+import Loader from "app/features/orders/loader";
 
-export const loader = () => json({
-    title: "Orders",
-    screen_title: "Review Orders"
-});
+export const loader = Loader;
 
 export const meta = useTitleMeta();
 
