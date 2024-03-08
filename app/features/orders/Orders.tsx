@@ -1,9 +1,8 @@
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, NavLink, useLoaderData } from "@remix-run/react";
 import { twMerge } from "tailwind-merge";
 import Loader from "./loader";
 
-type TLoaderData = Awaited<ReturnType<typeof Loader>>;
-type TOrders = Awaited<ReturnType<TLoaderData["json"]>>["orders"][0]["items"];
+type TOrder = { id: string };
 
 export default function Orders() {
     const loaderData = useLoaderData<typeof Loader>();
@@ -15,7 +14,7 @@ export default function Orders() {
                     <h3 className="uppercase">Recent orders</h3>
                 </div>
                 <div className="mt-6">
-                    <ItemsList items={loaderData.orders.map(order => order.items)} />
+                    <OrderList items={loaderData.orders} />
                 </div>
             </div>
             <div className="main-content h-full w-full px-6 py-5 border rounded-xl bg-white">
@@ -26,8 +25,7 @@ export default function Orders() {
 }
 
 // Items list component
-function ItemsList({ items }: { items?: TOrders[] }) {
-
+function OrderList({ items }: { items?: TOrder[] }) {
     return (
         <ul>
             {!items?.length && <li className="pl-3 text-slate-400 italic">No item available.</li>}
@@ -35,11 +33,11 @@ function ItemsList({ items }: { items?: TOrders[] }) {
                 <li
                     className={twMerge(
                         "border-b py-2 pl-3 mb-3",
-                        "hover:border-black hover:cursor-pointer hover:pl-2 hover:border-l-4",
+                        "hover:border-orange-500 hover:cursor-pointer hover:pl-2 hover:border-l-4",
                     )}
                     key={Math.random()}
                 >
-                    <Link to={`./${item}`}>Item {item}</Link>
+                    <NavLink to={`./${item.id}`}>Order-{item.id.substring(0,8)}</NavLink>
                 </li>
             ))}
         </ul>
