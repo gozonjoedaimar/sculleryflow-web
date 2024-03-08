@@ -21,7 +21,7 @@ export default async function MenuLoader({ request }: LoaderFunctionArgs) {
 	return json({
 		title: "Menu",
 		authenticated, menu,
-		screen_title: "Manage Menu",
+		screen_title: "Manage Menu (Beta)",
 	}, sessionHeaders);
 }
 

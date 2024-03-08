@@ -4,7 +4,7 @@ import Stockroom from "app/features/stockroom/Stockroom";
 
 export const loader = async () => json({
     title: "Stockroom",
-    screen_title: "Manage Stockroom Inventory",
+    screen_title: "Manage Stockroom Inventory (WIP)",
 });
 
 export const meta = useTitleMeta();

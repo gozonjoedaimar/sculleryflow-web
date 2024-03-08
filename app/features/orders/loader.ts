@@ -24,7 +24,7 @@ const Loader = async ({ request }: LoaderFunctionArgs) => {
 
     return json({
         title: "Orders",
-        screen_title: "Review Orders",
+        screen_title: "Review Orders (WIP)",
         orders: orders.map((order) => ({
             id: order._id,
             items: order.items
