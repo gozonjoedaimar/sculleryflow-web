@@ -1,9 +1,11 @@
 type PercentageCircleProps = {
 	percentage: number;
+	title?: string;
 };
 
 export default function PercentageCircle({
 	percentage,
+	title
 }: PercentageCircleProps) {
 	const radius = 50;
 	const circumference = 2 * Math.PI * radius;
@@ -12,7 +14,7 @@ export default function PercentageCircle({
 	return (
 		<svg className="relative" width="40" height="40" viewBox="0 0 120 120">
             <title>
-                {percentage}%
+                {title || `${percentage}%`}
             </title>
 			<circle
 				cx="60"
@@ -41,7 +43,7 @@ export default function PercentageCircle({
 				fontSize="35"
 				fill="red"
 			>
-				{percentage}%
+				{percentage.toFixed(0)}%
 			</text>
 		</svg>
 	);
