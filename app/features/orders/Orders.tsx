@@ -1,4 +1,4 @@
-import { Link, NavLink, useLoaderData } from "@remix-run/react";
+import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { twMerge } from "tailwind-merge";
 import Loader from "./loader";
 
@@ -18,7 +18,7 @@ export default function Orders() {
                 </div>
             </div>
             <div className="main-content h-full w-full px-6 py-5 border rounded-xl bg-white">
-                No item selected.
+                <Outlet />
             </div>
         </div>
     );
@@ -32,12 +32,19 @@ function OrderList({ items }: { items?: TOrder[] }) {
             {!!items?.length && items!.map((item) => (
                 <li
                     className={twMerge(
-                        "border-b py-2 pl-3 mb-3",
-                        "hover:border-orange-500 hover:cursor-pointer hover:pl-2 hover:border-l-4",
+                        //"border-b py-2 pl-3 mb-3",
+                        // "hover:border-orange-500 hover:cursor-pointer hover:pl-2 hover:border-l-4",
                     )}
                     key={Math.random()}
                 >
-                    <NavLink to={`./${item.id}`}>Order-{item.id.substring(0,8)}</NavLink>
+                    <NavLink
+                        to={`./${item.id}`}
+                        className={({ isActive, isPending }) => twMerge(
+                            "block border-b py-2 pl-3 mb-3",
+                            "hover:border-orange-500 hover:cursor-pointer hover:pl-2 hover:border-l-4 hover:border-b-orange-300",
+                            isActive && "border-orange-500 cursor-pointer pl-2 border-l-4 border-b-orange-300",
+                        )}
+                    >Order-{item.id.substring(0, 8)}</NavLink>
                 </li>
             ))}
         </ul>
