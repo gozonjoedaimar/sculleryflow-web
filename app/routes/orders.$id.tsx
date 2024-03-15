@@ -20,7 +20,7 @@ type ItemData = {
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const { authenticated } = await checkAuth(request);
-    if (!authenticated) return json({ error: "Unauthorized", id: null }, { status: 400 });
+    if (!authenticated) return json({ error: "Unauthorized. Please reload the page and try again.", id: null }, { status: 400 });
 
     const id = params.id as string;
 
