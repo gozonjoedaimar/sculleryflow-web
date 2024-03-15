@@ -9,9 +9,14 @@ const menuapi = (id: string) => `${api_url}/api/menu/${id}`;
 
 type LoaderData = {
     id: string;
-    items: string[];
+    items: ItemData[];
     error?: string;
 };
+
+type ItemData = {
+    _id: string;
+    name: string;
+}
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     const { authenticated } = await checkAuth(request);
@@ -21,10 +26,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
     const item_ids = await HttpClient.get<{ order: { items: string[] } }>(api(id)).then(res => res.data?.order.items || []).catch(e => console.log(e.message)) || [];
 
-    const query = [] as Promise<string>[];
+    const query = [] as Promise<ItemData>[];
 
     item_ids.map(id => {
-        const item = HttpClient.get<{ name: string; }>(menuapi(id)).then(res => res.data?.name || "")
+        const item = HttpClient.get<ItemData>(menuapi(id)).then(res => res.data || {} as ItemData)
         query.push(item)
     });
 
@@ -45,7 +50,7 @@ export default function OrderView() {
                 <ul>
                     <li>Order items:</li>
                     {!items.length && <li className="mb-4">No item added</li>}
-                    {items.map(item => <li className="text-slate-500">{item}</li>)}
+                    {items.map(item => <li key={item._id} className="text-slate-500">{item.name}</li>)}
                 </ul>
             </>
     )
